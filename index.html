@@ -9,14 +9,102 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
     <title>Hello, world!</title>
+    <style>
+        .specialLi{
+            font-size: 24px;
+        }
+    
+    </style>
   </head>
   <body>
-    <h1>Hello, world!</h1>
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <img class="img-fluid" src="ubuntu.png">
+                <ul id="myList">
+                    <li>1</li>
+                    <li>2</li>
+                    <li>3</li>
+                    <li>4</li>
+                </ul>
+            </div>
+            <div class="col-md-4 row" id="operatingSystems">
+            </div>
+            <div class="col-md-4">
+                <input type="button" id="addListItem" class="btn btn-primary" value="add list item">
+
+                <input type="button" id="addListItem" class="btn btn-primary" value="count images" onclick="countImages()">
+
+                <input type="button" class="btn btn-primary addOs" value="add Windows 10">
+                <input type="button" class="btn btn-primary addOs" value="add OSX">
+                <input type="button" class="btn btn-primary addOs" value="add Ubuntu">
+            </div>
+        </div>
+    </div>
+
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+    <script>
+
+        window.onload = function(){
+            var addListItemButton = document.querySelector("#addListItem");
+            addListItemButton.addEventListener("click", test);
+
+            var osButtons = document.querySelectorAll(".addOs"); //=> Array
+            for (var i = 0; i < osButtons.length; i++){
+                osButtons[i].addEventListener("click", addImage);
+            }
+        }
+
+        function countImages(){
+            var container = document.querySelector("#operatingSystems");
+            var images = container.querySelectorAll("img");
+            for (var i = 0; i < images.length; i++){
+                images[i].style.border = "1px solid red";
+            }
+            console.log(images.length);
+        }
+
+        function addImage(myev){
+            var pressedButton = myev.currentTarget;
+
+            var div = document.createElement("div");
+            div.classList.add("col-md-4");
+
+            var img = document.createElement("img");
+            img.classList.add("img-fluid");
+
+            console.log(pressedButton.value);
+            var selectedButtonValue = pressedButton.value;
+
+            switch(selectedButtonValue){
+                case "add OSX": img.setAttribute("src", "OSX.jpg"); break;
+                case "add Windows 10": img.setAttribute("src", "Win10.jpg"); break;
+                case "add Ubuntu": img.setAttribute("src", "ubuntu.png"); break;
+            }
+
+            div.appendChild(img);
+
+            var osContainer = document.querySelector("#operatingSystems");
+            osContainer.appendChild(div);
+        }
+
+        function test(myClickEvent){
+            //create a new LI
+            var li = document.createElement("li");
+            li.innerHTML = "newly created list item";
+            li.classList.add("specialLi");
+            //get a reference to the list
+            var ul = document.querySelector("#myList");
+            //add the new LI to the list
+            ul.appendChild(li);
+        }
+    </script>
   </body>
 </html>
