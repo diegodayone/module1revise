@@ -14,12 +14,22 @@
             font-size: 24px;
         }
     
+
+        .centeredInTheImage{
+            position: absolute;
+
+        }
+
+        .team{
+            border: 1px solid red;
+            min-height: 200px;
+        }
     </style>
   </head>
   <body>
     
     <div class="container">
-        <div class="row">
+        <!-- <div class="row">
             <div class="col-md-4">
                 <img class="img-fluid" src="ubuntu.png">
                 <ul id="myList">
@@ -40,6 +50,22 @@
                 <input type="button" class="btn btn-primary addOs" value="add OSX">
                 <input type="button" class="btn btn-primary addOs" value="add Ubuntu">
             </div>
+        </div> -->
+
+        <div class="row">
+            <div class="col-md-4">
+                <ul id="players"></ul>
+                <input type="text" id="newPlayer">
+                <input type="button" onclick="addPlayer()" value="add player">
+                <input type="button" onclick="assignPlayer()" value="assign player">
+            </div>
+            <div class="col-md-4">
+                <input type="number" id="newTeams">
+                <input type="button" onclick="addTeams()" value="add teams">
+            </div>
+            <div class="col-md-4" id="teams">
+
+            </div>
         </div>
     </div>
 
@@ -52,21 +78,90 @@
 
     <script>
 
-        window.onload = function(){
-            var addListItemButton = document.querySelector("#addListItem");
-            addListItemButton.addEventListener("click", test);
+        function addPlayer(){
+            var list = document.querySelector("#players");
+            var playerName = document.querySelector("#newPlayer").value;
 
-            var osButtons = document.querySelectorAll(".addOs"); //=> Array
-            for (var i = 0; i < osButtons.length; i++){
-                osButtons[i].addEventListener("click", addImage);
+            var li = document.createElement("li");
+            li.innerText = playerName;
+            list.appendChild(li);
+        }
+
+        function addTeams(){
+            var numberOfTeams = parseInt(document.querySelector("#newTeams").value);
+
+            var teams = document.querySelector("#teams");
+            for (var i = 0; i < numberOfTeams; i++){
+                var div = document.createElement("div");
+                div.classList.add("col-md-12");
+                div.classList.add("team");
+                div.innerText = "Team " + (i +1);
+
+                var ul = document.createElement("ul");
+                div.appendChild(ul);
+                teams.appendChild(div);
             }
+        }
+
+        function assignPlayer(){
+            //Randomly pick a player
+            var ul = document.querySelector("#players");
+            var players = ul.querySelectorAll("li");
+            
+            
+            //Calculate how many players per team based on the #players and #teams
+            var playersNumber = players.length;
+            var numberOfTeams =  parseInt(document.querySelector("#newTeams").value);
+
+            var selectedPlayer = players[Math.round(Math.random() * playersNumber)];
+            var playersPerTeam = Math.floor(playersNumber / numberOfTeams);
+
+            //Add the player to the team
+            var teams = document.querySelectorAll(".team");
+            for (var i = 0; i < teams.length; i++){
+                var teamPlayers = teams[i].querySelectorAll("li");
+                if (teamPlayers.length > playersPerTeam){
+                    continue;
+                }
+                else{
+                    var ul = teams[i].querySelector("ul");
+                    var li = document.createElement("li");
+                    li.innerText = selectedPlayer.innerText;
+                    ul.appendChild(li);
+                    break;
+                }
+            }
+
+            //Remove the player from the list
+            selectedPlayer.remove();
+        }
+
+        window.onload = function(){
+            // var addListItemButton = document.querySelector("#addListItem");
+            // addListItemButton.addEventListener("click", test);
+
+            // var osButtons = document.querySelectorAll(".addOs"); //=> Array
+            // for (var i = 0; i < osButtons.length; i++){
+            //     osButtons[i].addEventListener("click", addImage);
+            // }
         }
 
         function countImages(){
             var container = document.querySelector("#operatingSystems");
             var images = container.querySelectorAll("img");
             for (var i = 0; i < images.length; i++){
-                images[i].style.border = "1px solid red";
+                var text = document.createElement("span");
+                //text.style.position = "absolute"
+                
+                var imageSource = images[i].getAttribute("src");
+                switch(imageSource){
+                    case "OSX.jpg": text.innerText = "OSX"; break;
+                    case "Win10.jpg": text.innerText = "Windows 10"; break;
+                    default: text.innerText = "Ubuntu";
+                }
+
+                // => from the Pic, getting the parent (div), adding the text to the DIV
+                images[i].parentElement.appendChild(text);
             }
             console.log(images.length);
         }
